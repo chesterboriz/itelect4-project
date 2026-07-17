@@ -33,7 +33,7 @@ export interface Submission {
   userId: number;
   courseId: string;
   grade: number;
-  submittedAt: string; // ISO timestamp
+  submittedAt: string;
   status: SubmissionStatus;
 }
 
@@ -54,14 +54,14 @@ export type UserSummary = Pick<User, "id" | "name" | "email">;
 export type CourseUpdate = Partial<Omit<Course, "id">>;
 export type UserMap = Record<string, User>;
 
-function getById<T extends { id: string | number }>(
+export function getById<T extends { id: string | number }>(
   items: T[],
   id: string | number,
 ): T | undefined {
   return items.find((item) => item.id === id);
 }
 
-function isSubmission(value: unknown): value is Submission {
+export function isSubmission(value: unknown): value is Submission {
   return (
     typeof value === "object" &&
     value !== null &&
@@ -71,4 +71,4 @@ function isSubmission(value: unknown): value is Submission {
   );
 }
 
-export { Role, SubmissionStatus, getById, isSubmission };
+export { Role, SubmissionStatus };
