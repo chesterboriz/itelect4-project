@@ -1,13 +1,13 @@
 const enum Role {
   Student = "student",
-  Teacher = "teacher",
+  SecurityAdmin = "security-admin",
   Admin = "admin",
 }
 
-enum SubmissionStatus {
-  Draft = "draft",
-  Submitted = "submitted",
-  Graded = "graded",
+enum ClaimStatus {
+  Pending = "pending",
+  Verified = "verified",
+  Rejected = "rejected",
 }
 
 export interface User {
@@ -19,22 +19,23 @@ export interface User {
   score: number;
 }
 
-export interface Course {
+export interface Item {
   id: string;
   title: string;
-  units: number;
-  semester: string;
-  instructor?: string;
-  isOpen: boolean;
+  category: string;
+  locationFound: string;
+  description?: string;
+  status: "reported" | "claimed" | "resolved";
+  isClaimed: boolean;
 }
 
-export interface Submission {
+export interface Claim {
   id: string;
   userId: number;
-  courseId: string;
-  grade: number;
-  submittedAt: string;
-  status: SubmissionStatus;
+  itemId: string;
+  claimReason: string;
+  claimedAt: string;
+  status: ClaimStatus;
 }
 
 export interface ApiResponse<T> {
@@ -45,13 +46,13 @@ export interface ApiResponse<T> {
 
 export type ID = string | number;
 export type StringOrNumber = string | number;
-export type StudentWithCourse = User & { enrolledCourse: Course };
+export type UserWithItem = User & { reportedItem: Item };
 export type MaybeUser = User | null | undefined;
 export type UnknownValue = unknown;
 export type NeverValue = never;
 export type UserRole = User["role"];
 export type UserSummary = Pick<User, "id" | "name" | "email">;
-export type CourseUpdate = Partial<Omit<Course, "id">>;
+export type ItemUpdate = Partial<Omit<Item, "id">>;
 export type UserMap = Record<string, User>;
 
 export function getById<T extends { id: string | number }>(
@@ -61,14 +62,14 @@ export function getById<T extends { id: string | number }>(
   return items.find((item) => item.id === id);
 }
 
-export function isSubmission(value: unknown): value is Submission {
+export function isClaim(value: unknown): value is Claim {
   return (
     typeof value === "object" &&
     value !== null &&
     "id" in value &&
-    "courseId" in value &&
-    "grade" in value
+    "itemId" in value &&
+    "status" in value
   );
 }
 
-export { Role, SubmissionStatus };
+export { Role, ClaimStatus };

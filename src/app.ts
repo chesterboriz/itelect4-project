@@ -1,70 +1,80 @@
 import type {
   User,
-  Course,
-  Submission,
+  Item,
+  Claim,
   ID,
   StringOrNumber,
-  StudentWithCourse,
+  UserWithItem,
   MaybeUser,
   UnknownValue,
   ApiResponse,
   UserSummary,
-  CourseUpdate,
+  ItemUpdate,
   UserMap,
 } from "../types/app";
-import { getById, Role, SubmissionStatus } from "../types/app";
+import { getById, Role, ClaimStatus } from "../types/app";
 import sample = require("./sample");
 
-const user: User = sample.getUser(1);
-
-const course: Course = {
-  id: "IT-401",
-  title: "IT Elective 4",
-  units: 3,
-  semester: "1st Semester",
-  instructor: "Dr. Smith",
-  isOpen: true,
+const student: User = sample.getUser(1);
+const admin: User = {
+  id: 2,
+  name: "Security Admin",
+  email: "security@example.com",
+  role: Role.SecurityAdmin,
+  isActive: true,
+  score: 0,
 };
 
-const submission: Submission = {
-  id: "sub-001",
-  userId: user.id,
-  courseId: course.id,
-  grade: 85,
-  submittedAt: new Date().toISOString(),
-  status: SubmissionStatus.Submitted,
+const item: Item = {
+  id: "item-101",
+  title: "Black Wallet",
+  category: "Personal Item",
+  locationFound: "Library Lobby",
+  description: "Contains student ID and cash",
+  status: "reported",
+  isClaimed: false,
 };
 
-const studentWithCourse: StudentWithCourse = {
-  ...user,
-  enrolledCourse: course,
+const claim: Claim = {
+  id: "claim-001",
+  userId: student.id,
+  itemId: item.id,
+  claimReason: "This wallet matches my description",
+  claimedAt: new Date().toISOString(),
+  status: ClaimStatus.Pending,
 };
 
-const response: ApiResponse<User> = {
+const userWithItem: UserWithItem = {
+  ...student,
+  reportedItem: item,
+};
+
+const response: ApiResponse<Item> = {
   success: true,
-  data: user,
-  message: "User loaded successfully",
+  data: item,
+  message: "Lost item loaded successfully",
 };
 
 const userSummary: UserSummary = {
-  id: user.id,
-  name: user.name,
-  email: user.email,
+  id: student.id,
+  name: student.name,
+  email: student.email,
 };
 
-const courseUpdate: CourseUpdate = {
-  title: "IT Elective 4",
-  isOpen: true,
+const itemUpdate: ItemUpdate = {
+  status: "claimed",
+  isClaimed: true,
 };
 
 const userMap: UserMap = {
-  [user.id.toString()]: user,
+  [student.id.toString()]: student,
+  [admin.id.toString()]: admin,
 };
 
-const submissionId: ID = submission.id;
-const displayScore: StringOrNumber = user.score;
-const maybeUser: MaybeUser = getById([user], user.id) ?? null;
-const unknownValue: UnknownValue = "Ready for review";
+const claimId: ID = claim.id;
+const displayScore: StringOrNumber = student.score;
+const maybeUser: MaybeUser = getById([student, admin], student.id) ?? null;
+const unknownValue: UnknownValue = "Ready for verification";
 
 function describeValue(value: UnknownValue): string {
   if (typeof value === "string") {
@@ -80,32 +90,33 @@ function describeValue(value: UnknownValue): string {
 }
 
 const roleLabel =
-  user.role === Role.Student
+  student.role === Role.Student
     ? "Student"
-    : user.role === Role.Teacher
-      ? "Teacher"
+    : student.role === Role.SecurityAdmin
+      ? "Security Admin"
       : "Admin";
 
 const statusLabel =
-  submission.status === SubmissionStatus.Draft
-    ? "Draft"
-    : submission.status === SubmissionStatus.Submitted
-      ? "Submitted"
-      : "Graded";
+  claim.status === ClaimStatus.Pending
+    ? "Pending"
+    : claim.status === ClaimStatus.Verified
+      ? "Verified"
+      : "Rejected";
 
-console.log("Student:", user);
-console.log("Course:", course);
-console.log("Submission:", submission);
-console.log("Student with course:", studentWithCourse);
+console.log("Student:", student);
+console.log("Admin:", admin);
+console.log("Lost item:", item);
+console.log("Claim:", claim);
+console.log("User with item:", userWithItem);
 console.log("Response:", response);
 console.log("User summary:", userSummary);
-console.log("Course update:", courseUpdate);
+console.log("Item update:", itemUpdate);
 console.log("User map:", userMap);
-console.log("Submission ID:", submissionId);
+console.log("Claim ID:", claimId);
 console.log("Display score:", displayScore);
 console.log("Maybe user:", maybeUser);
 console.log("Type narrowing:", describeValue(unknownValue));
 console.log("Role:", roleLabel);
 console.log("Status:", statusLabel);
-console.log(sample.calculateGrade(submission.grade, 100));
-console.log(sample.formatCourse(course.title, course.units, course.semester));
+console.log(sample.calculateGrade(85, 100));
+console.log(sample.formatCourse("Campus Lost & Found", 1, "Current Semester"));

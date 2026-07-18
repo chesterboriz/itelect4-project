@@ -5,7 +5,7 @@ import { Role } from "../types/app";
 function getUser(id: number): User {
   return {
     id: id,
-    name: "Juan dela Cruz",
+    name: "Chester Boriz Macalintal",
     email: "juan@example.com",
     role: Role.Student,
     isActive: true,
