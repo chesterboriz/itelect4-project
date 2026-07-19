@@ -13,9 +13,9 @@ import type {
   UserMap,
 } from "../types/app";
 import { getById, Role, ClaimStatus } from "../types/app";
-import sample = require("./sample");
+import { getUser, calculateGrade, formatCourse } from "./sample";
 
-const student: User = sample.getUser(1);
+const student: User = getUser(1);
 const admin: User = {
   id: 2,
   name: "Security Admin",
@@ -118,5 +118,9 @@ console.log("Maybe user:", maybeUser);
 console.log("Type narrowing:", describeValue(unknownValue));
 console.log("Role:", roleLabel);
 console.log("Status:", statusLabel);
-console.log(sample.calculateGrade(85, 100));
-console.log(sample.formatCourse("Campus Lost & Found", 1, "Current Semester"));
+console.log(calculateGrade(85, 100));
+console.log(formatCourse("Campus Lost & Found", 1, "Current Semester"));
+
+export default function App() {
+  return null;
+}

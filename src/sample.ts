@@ -6,7 +6,7 @@ function getUser(id: number): User {
   return {
     id: id,
     name: "Chester Boriz Macalintal",
-    email: "juan@example.com",
+    email: "mikaysabel@example.com",
     role: Role.Student,
     isActive: true,
     score: 95.5,
@@ -32,6 +32,5 @@ function formatCourse(
   return `${name} (${units} units) - ${semester}`;
 }
 
-const exported = { getUser, calculateGrade, formatCourse };
-export = exported;
+export { getUser, calculateGrade, formatCourse };
 
