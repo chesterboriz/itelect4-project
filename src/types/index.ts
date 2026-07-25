@@ -29,6 +29,15 @@ export interface Item {
   isClaimed: boolean;
 }
 
+export interface Course {
+  id: string;
+  title: string;
+  units: number;
+  semester: string;
+  instructor?: string;
+  isOpen: boolean;
+}
+
 export interface Claim {
   id: string;
   userId: number;
