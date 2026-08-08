@@ -5,7 +5,7 @@ import { ClaimPanel } from './components/ClaimPanel';
 import CourseCard from './components/CourseCard';
 import { SubmissionBadge } from './components/SubmissionBadge';
 import { User, Item, Claim, Course, Role, ClaimStatus } from './types';
-import { useToggle } from './hooks';
+import { useToggle } from './hooks/useToggle';
 
 type SubmissionItem = {
   id: string;

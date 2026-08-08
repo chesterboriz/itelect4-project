@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import type { Claim } from '../types';
-import { usePrevious, useToggle } from '../hooks';
+import { usePrevious } from '../hooks/usePrevious';
+import { useToggle } from '../hooks/useToggle';
 
 interface ClaimPanelProps {
   claim: Claim;
