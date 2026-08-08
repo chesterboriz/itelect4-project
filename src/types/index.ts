@@ -31,6 +31,7 @@ export interface Item {
 
 export interface Course {
   id: string;
+  code: string;
   title: string;
   units: number;
   semester: string;
