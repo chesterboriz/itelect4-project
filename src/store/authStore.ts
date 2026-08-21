@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 interface AuthState {
   token: string | null;
@@ -6,8 +7,16 @@ interface AuthState {
   logout: () => void;
 }
 
-export const useAuthStore = create<AuthState>((set: any) => ({
-  token: null,
-  login: (token: string) => set({ token }),
-  logout: () => set({ token: null }),
-}));
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      token: null,
+      login: (token) => set({ token }),
+      logout: () => set({ token: null }),
+    }),
+    {
+      name: 'campus-tracker-auth',
+      partialize: (state) => ({ token: state.token }),
+    },
+  ),
+);

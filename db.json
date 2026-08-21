@@ -1,0 +1,47 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Chester Boriz Macalintal",
+      "email": "chester@example.com",
+      "role": "student",
+      "isActive": true,
+      "score": 95.5
+    }
+  ],
+  "items": [
+    {
+      "id": "item-101",
+      "title": "Black Wallet",
+      "category": "Personal Item",
+      "locationFound": "Library Lobby",
+      "description": "Contains student ID and cash",
+      "status": "reported",
+      "isClaimed": false
+    },
+    {
+      "id": "item-102",
+      "title": "Blue Umbrella",
+      "category": "Accessory",
+      "locationFound": "Cafeteria",
+      "description": "Foldable umbrella with a wooden handle",
+      "status": "reported",
+      "isClaimed": false
+    }
+  ],
+  "claims": [
+    {
+      "id": "claim-001",
+      "userId": 1,
+      "itemId": "item-101",
+      "claimReason": "This wallet matches my description",
+      "claimedAt": "2026-08-21T09:00:00.000Z",
+      "status": "pending"
+    }
+  ],
+  "submissions": [
+    { "id": "sub-001", "status": "submitted", "title": "Lost Wallet Report" },
+    { "id": "sub-002", "status": "graded", "title": "Documentation Review" },
+    { "id": "sub-003", "status": "draft", "title": "Claim Follow-Up" }
+  ]
+}
