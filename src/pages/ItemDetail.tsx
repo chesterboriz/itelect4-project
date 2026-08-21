@@ -1,30 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
-import type { Item } from '../types';
-
-const mockApiFetchItems = (): Promise<Item[]> =>
-  new Promise((resolve) =>
-    setTimeout(() => {
-      resolve([
-        { id: 'item-101', title: 'Black Wallet', category: 'Personal Item', locationFound: 'Library Lobby', description: 'Contains student ID and cash', status: 'reported', isClaimed: false },
-        { id: 'item-102', title: 'Blue Umbrella', category: 'Accessory', locationFound: 'Cafeteria', description: 'Foldable umbrella', status: 'reported', isClaimed: false },
-      ]);
-    }, 200),
-  );
+import { getItem } from '../api/client';
 
 const ItemDetail: React.FC = () => {
-  const params = useParams<{ id: string }>();
-  const { id } = params;
-  const [item, setItem] = useState<Item | null>(null);
+  const { id } = useParams<{ id: string }>();
+  const itemQuery = useQuery({
+    queryKey: ['item', id],
+    queryFn: () => getItem(id as string),
+    enabled: Boolean(id),
+  });
 
-  useEffect(() => {
-    if (!id) return;
-    mockApiFetchItems().then((items) => setItem(items.find((it) => it.id === id) ?? null));
-  }, [id]);
+  if (!id) return <main className="p-6">Invalid item URL.</main>;
+  if (itemQuery.isLoading) return <main className="p-6">Loading item...</main>;
+  if (itemQuery.isError || !itemQuery.data) return <main className="p-6 text-rose-700">Item not found.</main>;
 
-  if (!id) return <div>Invalid item</div>;
-  if (!item) return <div>Loading item...</div>;
-
+  const item = itemQuery.data;
   return (
     <main className="p-6">
       <h1 className="text-2xl font-semibold">{item.title}</h1>
