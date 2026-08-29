@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
 import { getClaims, getItems, getSubmissions, getUsers, createClaim, type NewClaim } from '../api/client';
 import { UserCard } from '../components/UserCard';
@@ -9,6 +11,10 @@ import { SubmissionBadge } from '../components/SubmissionBadge';
 import { ClaimStatus } from '../types';
 import { useToggle } from '../hooks/useToggle';
 import { useUiStore } from '../store/uiStore';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { claimSchema, type ClaimFormValues } from '@/schemas/claimSchema';
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -17,6 +23,10 @@ const Dashboard: React.FC = () => {
   const setSearchTerm = useUiStore((state) => state.setSearchTerm);
   const [darkMode, toggleDarkMode] = useToggle(false);
   const [showClaimPanel, toggleClaimPanel] = useToggle(true);
+  const { register, handleSubmit, formState: { errors } } = useForm<ClaimFormValues>({
+    resolver: zodResolver(claimSchema),
+    defaultValues: { itemTitle: '', claimReason: '', followUp: '' },
+  });
 
   const usersQuery = useQuery({ queryKey: ['users'], queryFn: getUsers });
   const itemsQuery = useQuery({ queryKey: ['items'], queryFn: getItems });
@@ -44,12 +54,12 @@ const Dashboard: React.FC = () => {
     return item.title.toLowerCase().includes(search) || item.locationFound.toLowerCase().includes(search);
   });
 
-  const handleCreateClaim = (): void => {
+  const handleCreateClaim = (formData: ClaimFormValues): void => {
     if (!firstItem || claimMutation.isPending) return;
     claimMutation.mutate({
       userId: usersQuery.data?.[0]?.id ?? 1,
       itemId: firstItem.id,
-      claimReason: 'I can provide identifying details for this item.',
+      claimReason: `${formData.claimReason} ${formData.followUp}`,
       claimedAt: new Date().toISOString(),
       status: ClaimStatus.Pending,
     });
@@ -119,9 +129,27 @@ const Dashboard: React.FC = () => {
         </section>
 
         {showClaimPanel && claim ? <ClaimPanel claim={claim} /> : null}
-        <button type="button" onClick={handleCreateClaim} disabled={claimMutation.isPending} className="self-start rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-50">
-          {claimMutation.isPending ? 'Submitting claim...' : 'Submit a new claim'}
-        </button>
+        <form onSubmit={handleSubmit(handleCreateClaim)} className="max-w-xl space-y-4 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-lg dark:border-slate-700 dark:bg-slate-900">
+          <h2 className="text-xl font-semibold">Submit a claim</h2>
+          <div className="space-y-2">
+            <Label htmlFor="itemTitle">Item title</Label>
+            <Input id="itemTitle" {...register('itemTitle')} placeholder={firstItem?.title ?? 'Black Wallet'} />
+            {errors.itemTitle ? <p className="text-sm text-rose-600">{errors.itemTitle.message}</p> : null}
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="claimReason">Claim reason</Label>
+            <Input id="claimReason" {...register('claimReason')} placeholder="Mention the item title and why it belongs to you" />
+            {errors.claimReason ? <p className="text-sm text-rose-600">{errors.claimReason.message}</p> : null}
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="followUp">Identifying detail</Label>
+            <Input id="followUp" {...register('followUp')} placeholder="Add a color, location, or unique detail" />
+            {errors.followUp ? <p className="text-sm text-rose-600">{errors.followUp.message}</p> : null}
+          </div>
+          <Button type="submit" disabled={claimMutation.isPending} className="bg-emerald-600 hover:bg-emerald-700">
+            {claimMutation.isPending ? 'Submitting claim...' : 'Submit a new claim'}
+          </Button>
+        </form>
         {claimMutation.isSuccess ? <p className="text-sm text-emerald-700">Claim submitted and claims refreshed.</p> : null}
       </div>
     </main>
