@@ -83,3 +83,54 @@ export function isClaim(value: unknown): value is Claim {
 }
 
 export { Role, ClaimStatus };
+
+// ---------------------------------------------------------------------
+// GT4 PART 2 DERIVED TYPES (Matching real MongoDB API):
+// ---------------------------------------------------------------------
+
+export interface Submission {
+  id: string;
+  studentId: string;
+  courseCode: string;
+  repoUrl: string;
+  submittedAt: string;
+}
+
+// ===== SESSION 10: matching the real API =========
+export type ApiSubmission = Omit<
+  Submission,
+  "id" | "studentId" | "submittedAt"
+> & {
+  id: string; // 24 hex characters, from MongoDB's _id
+  studentId: string; // the owner's _id, also 24 hex characters
+  submittedAt: string; // an ISO string, never a Date object
+};
+
+// What we SEND when creating one. The server fills in studentId and submittedAt.
+export type NewSubmission = Pick<Submission, "courseCode" | "repoUrl">;
+
+// What /api/auth/register sends back, and what sits inside the login reply
+export type ApiUser = Omit<User, "id"> & {
+  id: string;
+};
+
+// What /api/auth/login sends back
+export interface AuthReply {
+  token: string;
+  user: ApiUser;
+}
+
+// Campus Lost & Found types matching real backend
+export type ItemApi = Omit<Item, "id"> & {
+  id: string;
+  userId?: string;
+  estimatedValue?: number;
+};
+
+export type NewItem = Pick<Item, "title" | "category" | "locationFound"> & {
+  description?: string;
+  status?: "reported" | "claimed" | "resolved";
+  isClaimed?: boolean;
+  estimatedValue?: number;
+};
+
