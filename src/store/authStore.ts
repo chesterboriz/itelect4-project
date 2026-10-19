@@ -1,22 +1,37 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface AuthState {
   token: string | null;
-  login: (token: string) => void;
+  userName: string | null;
+  // Two values in, nothing invented. The login page gets them from
+  // the API and hands them here.
+  setSession: (token: string, userName: string) => void;
+  login: (token: string, userName?: string) => void;
   logout: () => void;
 }
 
+// This file deliberately does not import ../api/client. client.ts
+// reads the token out of this store on every request, so a store that
+// called client.ts back would be an import loop. Keeping the fetching
+// in the pages and the state here means the arrow only points one way.
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       token: null,
-      login: (token) => set({ token }),
-      logout: () => set({ token: null }),
+      userName: null,
+      setSession: (token, userName) => set({ token, userName }),
+      login: (token, userName = "Student") => set({ token, userName }),
+      logout: () => set({ token: null, userName: null }),
     }),
     {
-      name: 'campus-tracker-auth',
-      partialize: (state) => ({ token: state.token }),
+      name: "itelect4-auth", // the localStorage key it writes to
+      partialize: (state) => ({
+        token: state.token,
+        userName: state.userName,
+      }),
     },
   ),
 );
+
+export default useAuthStore;
