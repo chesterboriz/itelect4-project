@@ -134,3 +134,11 @@ export type NewItem = Pick<Item, "title" | "category" | "locationFound"> & {
   estimatedValue?: number;
 };
 
+// ===== SESSION 11: what POST /api/ai sends back =======================
+// Derived from the backend's Review type in itelect4-backend/src/schemas/review.ts
+export interface AiReview {
+  summary: string;
+  strengths: string[];
+  improvements: string[];
+  readiness: "ready" | "almost" | "not-yet";
+}

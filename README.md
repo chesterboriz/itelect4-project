@@ -1,27 +1,53 @@
-# Campus Lost & Found Tracker
+# ITELECT4 Frontend
 
-This project demonstrates GT1 Part 2 TypeScript concepts through a simple campus lost-and-found app. The app models how students can report lost items, submit claims, and track claim status in a structured way.
+React + TypeScript + Vite frontend for the Campus Lost & Found system.
 
-## Project Concept
-The system includes users, lost items, and claim records. It shows how TypeScript interfaces, generics, utility types, and enums can be used to build a small but realistic app structure.
+## 🔗 Live Links
 
-## Interfaces and Types Defined
-- User
-- Course
-- Submission
-- ApiResponse<T>
-- ID
-- StringOrNumber
-- StudentWithCourse
-- MaybeUser
-- UnknownValue
-- UserSummary
-- CourseUpdate
-- UserMap
-- Role (const enum)
-- SubmissionStatus (enum)
+| | URL |
+|---|---|
+| **Live Frontend** | https://itelect4-project-nu.vercel.app |
+| **Live Backend** | https://itelect4-backend-chi.vercel.app |
 
-## How to Install and Run
-1. Install dependencies with `npm install`
-2. Verify there are no TypeScript errors with `npx tsc --noEmit`
-3. Run the app with `npx ts-node src/index.ts`
+## 🛠 Tech Stack
+
+- **Framework**: React 18 + TypeScript
+- **Build Tool**: Vite
+- **Routing**: React Router v6
+- **State Management**: Zustand
+- **Form Validation**: Zod + React Hook Form
+- **Deployment**: Vercel
+
+## 📄 Pages
+
+| Route | Description | Auth Required |
+|-------|-------------|--------------|
+| `/` | Dashboard | No |
+| `/courses` | Course list | No |
+| `/courses/:code` | Course detail | No |
+| `/items` | Lost & Found items | No |
+| `/items/:id` | Item detail | No |
+| `/register` | Register account | No |
+| `/login` | Login | No |
+| `/submissions` | My submissions | ✅ Yes |
+| `/review` | AI Project Review | ✅ Yes |
+| `/account` | Account info | ✅ Yes |
+
+## 🚀 Run Locally
+
+```bash
+# Install dependencies
+npm install
+
+# Copy env file and fill in values
+cp .env.example .env
+
+# Start dev server
+npm run dev
+```
+
+## ⚙️ Environment Variables
+
+```env
+VITE_API_URL=http://localhost:4000
+```
