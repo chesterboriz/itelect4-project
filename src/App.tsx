@@ -8,6 +8,7 @@ import CourseDetailPage from "./pages/CourseDetailPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import SubmissionsPage from "./pages/SubmissionsPage";
+import ReviewPage from "./pages/ReviewPage";
 import ItemsPage from "./pages/ItemsPage";
 import ItemDetail from "./pages/ItemDetail";
 import Account from "./pages/Account";
@@ -26,6 +27,8 @@ const App: React.FC = () => {
         <Route element={<ProtectedRoute />}>
           {/* <-- the guard */}
           <Route path="submissions" element={<SubmissionsPage />} />
+          {/* Session 11: behind the same guard -- the API refuses it without a token */}
+          <Route path="review" element={<ReviewPage />} />
           <Route path="account" element={<Account />} />
         </Route>
         <Route path="items" element={<ItemsPage />} />

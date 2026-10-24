@@ -30,6 +30,7 @@ React + TypeScript + Vite frontend for the Campus Lost & Found system.
 | `/register` | Register account | No |
 | `/login` | Login | No |
 | `/submissions` | My submissions | ✅ Yes |
+| `/review` | AI Project Review | ✅ Yes |
 | `/account` | Account info | ✅ Yes |
 
 ## 🚀 Run Locally

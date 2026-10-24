@@ -36,6 +36,11 @@ const Layout: React.FC = () => {
                 </NavLink>
               </li>
               <li>
+                <NavLink to="/review" className={linkClass}>
+                  AI Review
+                </NavLink>
+              </li>
+              <li>
                 <NavLink to="/items" className={linkClass}>
                   Lost Items
                 </NavLink>
