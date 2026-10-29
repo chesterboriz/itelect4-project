@@ -9,3 +9,5 @@ export function useToggle(initialValue: boolean): [boolean, () => void] {
 
   return [value, toggle];
 }
+
+export default useToggle;

@@ -6,6 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "lint": "oxlint",
+    "test": "vitest run --reporter=verbose",
+    "test:watch": "vitest",
     "preview": "vite preview"
   },
   "repository": {
@@ -21,12 +24,18 @@
   },
   "homepage": "https://github.com/chesterboriz/itelect4-project#readme",
   "devDependencies": {
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.8",
     "@types/node": "^26.1.0",
     "autoprefixer": "^10.5.4",
+    "jsdom": "^29.1.1",
+    "oxlint": "^1.90.0",
     "postcss": "^8.5.26",
     "tailwindcss": "^3.4.4",
     "ts-node": "^10.9.2",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vitest": "^5.0.5"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

@@ -104,6 +104,7 @@ export type ApiSubmission = Omit<
   id: string; // 24 hex characters, from MongoDB's _id
   studentId: string; // the owner's _id, also 24 hex characters
   submittedAt: string; // an ISO string, never a Date object
+  score?: number;
 };
 
 // What we SEND when creating one. The server fills in studentId and submittedAt.
