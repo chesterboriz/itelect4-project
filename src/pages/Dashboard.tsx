@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
-import { getClaims, getItems, getSubmissions, getUsers, createClaim, type NewClaim } from '../api/client';
+import { getClaims, getItems, fetchSubmissions, getUsers, createClaim, type NewClaim } from '../api/client';
 import { UserCard } from '../components/UserCard';
 import { ItemCard } from '../components/ItemCard';
 import { ClaimPanel } from '../components/ClaimPanel';
@@ -30,7 +30,8 @@ const Dashboard: React.FC = () => {
 
   const usersQuery = useQuery({ queryKey: ['users'], queryFn: getUsers });
   const itemsQuery = useQuery({ queryKey: ['items'], queryFn: getItems });
-  const submissionsQuery = useQuery({ queryKey: ['submissions'], queryFn: getSubmissions });
+  // Private route: a logged-out visitor just sees an empty list.
+  const submissionsQuery = useQuery({ queryKey: ['dashboard-submissions'], queryFn: () => fetchSubmissions().catch(() => []) });
   const firstItem = itemsQuery.data?.[0];
   const claimsQuery = useQuery({
     queryKey: ['claims', firstItem?.id],
@@ -106,9 +107,9 @@ const Dashboard: React.FC = () => {
             <h2 className="text-xl font-semibold">Recent submissions</h2>
             <div className="mt-6 space-y-4">
               {(submissionsQuery.data ?? []).map((submission) => (
-                <div key={submission.id} className="flex items-center justify-between rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-950">
-                  <p className="text-sm font-medium">{submission.title}</p>
-                  <SubmissionBadge status={submission.status} />
+                <div key={submission.id} className="rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-950">
+                  <p className="text-sm font-semibold text-lasalle dark:text-lasalle-gold">{submission.courseCode}</p>
+                  <SubmissionBadge submission={submission} />
                 </div>
               ))}
             </div>
