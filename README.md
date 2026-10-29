@@ -1,5 +1,7 @@
 # ITELECT4 Frontend
 
+[![CI](https://github.com/chesterboriz/itelect4-project/actions/workflows/ci.yml/badge.svg)](https://github.com/chesterboriz/itelect4-project/actions/workflows/ci.yml)
+
 React + TypeScript + Vite frontend for the Campus Lost & Found system.
 
 ## 🔗 Live Links
@@ -8,6 +10,19 @@ React + TypeScript + Vite frontend for the Campus Lost & Found system.
 |---|---|
 | **Live Frontend** | https://itelect4-project-nu.vercel.app |
 | **Live Backend** | https://itelect4-backend-chi.vercel.app |
+
+## 🏗 Architecture
+
+```mermaid
+flowchart LR
+  fe["itelect4-project<br/>React + Vite on Vercel"]
+  be["itelect4-backend<br/>Express on Vercel"]
+  db[("MongoDB Atlas")]
+  ai["Gemini API"]
+  fe -- "fetch + Bearer token" --> be
+  be -- "Mongoose" --> db
+  be -- "GEMINI_API_KEY" --> ai
+```
 
 ## 🛠 Tech Stack
 
@@ -51,3 +66,7 @@ npm run dev
 ```env
 VITE_API_URL=http://localhost:4000
 ```
+
+## 🤖 AI-Use Disclosure
+
+This project utilized AI assistance (Google Gemini / Antigravity) for automated test suite scaffolding, TypeScript type refinement, and CI workflow configuration in accordance with course guidelines.
