@@ -69,8 +69,10 @@ const Dashboard: React.FC = () => {
     return <main className="min-h-screen p-10 text-center">Loading campus tracker data...</main>;
   }
 
-  if (usersQuery.isError || itemsQuery.isError || submissionsQuery.isError) {
-    return <main className="min-h-screen p-10 text-center text-rose-700">Unable to load dashboard data. Start `npm run api` and refresh.</main>;
+  // /api/items is private, so it answers 401 for a logged-out visitor.
+  // That is not a broken dashboard: it just has no items to show yet.
+  if (usersQuery.isError || submissionsQuery.isError) {
+    return <main className="min-h-screen p-10 text-center text-rose-700">Unable to load dashboard data. Please refresh.</main>;
   }
 
   const user = usersQuery.data?.[0];
@@ -123,6 +125,9 @@ const Dashboard: React.FC = () => {
           <div className="flex items-center justify-between">
             <div><h2 className="text-2xl font-semibold">Matching items</h2><p className="text-sm text-slate-600 dark:text-slate-400">{filteredItems.length} result(s)</p></div>
           </div>
+          {itemsQuery.isError ? (
+            <p className="text-sm text-slate-600 dark:text-slate-400">Log in to see your reported items.</p>
+          ) : null}
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filteredItems.map((item) => <ItemCard key={item.id} item={item} />)}
           </div>
